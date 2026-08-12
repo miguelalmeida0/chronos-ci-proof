@@ -1,0 +1,20 @@
+schema_version: "1.0"
+experiment:
+  id: ext-006-athlete-group-leakage
+  entrypoint: python -m injury_risk.models.train --track synthetic --seed 42
+  exact_parent_commit: a581cbdf3fa5ba193dcd294b8711465a92fe74b7
+environment:
+  python: "3.12"
+  network: disabled
+metric:
+  name: cross_validation.f1_macro.mean
+  source: reports/metrics_synthetic.json
+  expected: 0.5691695579578677
+  tolerance: 1.0e-12
+  repeats: 3
+  variance_threshold: 1.0e-12
+guardrail:
+  id: chronos-athlete-group-isolation-v1
+  source: src/injury_risk/models/train.py
+  boundary: athlete_id
+  initial_state: INSTALLED

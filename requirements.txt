@@ -1,0 +1,7 @@
+# Dependencies are declared in pyproject.toml — it is the single source of truth.
+# This file is kept for tools that expect a requirements.txt (e.g. Streamlit Cloud).
+#
+#   pip install -r requirements.txt   -> runtime + dashboard
+#   pip install -e ".[dev]"           -> development (tests, lint, notebooks)
+
+-e .[dashboard]
