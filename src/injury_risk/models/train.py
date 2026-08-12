@@ -82,7 +82,7 @@ def _build_pipeline(n_classes: int, seed: int = 42, params: dict | None = None) 
 def _evaluate_cv(pipe: ImbPipeline, X: pd.DataFrame, y: pd.Series, seed: int = 42, groups=None) -> dict:
     """Stratified 5-fold cross-validation, returns the mean scores."""
     cv = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=seed)
-    results = cross_validate(pipe, X, y, cv=cv, scoring=SCORING, n_jobs=-1, groups=groups)
+    results = cross_validate(pipe, X, y, cv=cv, scoring=SCORING, n_jobs=-1)
     summary = {
         metric: {
             "mean": float(np.mean(results[f"test_{metric}"])),
