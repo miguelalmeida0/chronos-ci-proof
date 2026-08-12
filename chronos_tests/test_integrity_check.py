@@ -33,7 +33,7 @@ class IntegrityCheckTests(unittest.TestCase):
             from sklearn.model_selection import StratifiedGroupKFold, cross_validate
             cv = StratifiedGroupKFold(n_splits=5)
             cross_validate(pipe, X, y, cv=cv, groups=groups)
-            cv.split(X, y, groups)
+            cv.split(X, y, groups=groups)
             """
         )
         self.assertEqual(inspect_source(source), [])

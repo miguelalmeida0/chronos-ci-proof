@@ -66,7 +66,10 @@ def inspect_source(source: str) -> list[dict[str, object]]:
         )
 
     split_calls = [call for call in calls if _call_name(call) == "split"]
-    if not split_calls or any(len(call.args) < 3 for call in split_calls):
+    if not split_calls or any(
+        len(call.args) < 3 and not any(keyword.arg == "groups" for keyword in call.keywords)
+        for call in split_calls
+    ):
         findings.append(
             {
                 "code": "HOLDOUT_GROUPS_MISSING",
