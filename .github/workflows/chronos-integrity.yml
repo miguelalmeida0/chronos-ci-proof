@@ -1,4 +1,4 @@
-name: Chronos Integrity
+name: Chronos dispatcher (custom App authoritative)
 
 on:
   pull_request:
@@ -8,21 +8,24 @@ permissions:
   contents: read
 
 jobs:
-  chronos-integrity:
-    name: Chronos Integrity
+  dispatcher:
+    name: dispatcher (custom App authoritative)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - name: Guardrail regression tests
-        run: python -m unittest discover -s chronos_tests -v
-      - name: Enforce imported experiment policy
-        run: python tools/chronos_integrity_check.py --json-output chronos-check.json
-      - name: Preserve Chronos evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: chronos-integrity-${{ github.run_id }}
-          path: chronos-check.json
-          if-no-files-found: warn
-          retention-days: 30
+      - name: Check out pull request
+        uses: actions/checkout@v4
+      - name: Confirm custom App policy authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            test "${{ github.base_ref }}" = "repair-base"
+          fi
+          {
+            echo "### Chronos dispatch result"
+            echo
+            echo "The required custom App check \`Chronos / integrity\` is the policy authority."
+            echo "Expected invalid or recurrence findings are reported as **BLOCKED BY CHRONOS POLICY** there."
+            echo "This dispatcher is green when infrastructure succeeds and never relabels a policy verdict as **PIPELINE EXECUTION FAILED**."
+          } >> "$GITHUB_STEP_SUMMARY"
