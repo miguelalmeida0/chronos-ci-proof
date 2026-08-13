@@ -84,7 +84,7 @@ def _evaluate_cv(
 ) -> dict:
     """Stratified 5-fold cross-validation, returns the mean scores."""
     cv = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=seed)
-    results = cross_validate(pipe, X, y, cv=cv, scoring=SCORING, n_jobs=-1, groups=groups)
+    results = cross_validate(pipe, X, y, cv=cv, scoring=SCORING, n_jobs=-1)
     summary = {
         metric: {
             "mean": float(np.mean(results[f"test_{metric}"])),
